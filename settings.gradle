@@ -18,5 +18,6 @@ dependencyResolutionManagement {
     }
 }
 
+rootProject.name = "FtcRobotController"
 include ':FtcRobotController'
 include ':TeamCode'
