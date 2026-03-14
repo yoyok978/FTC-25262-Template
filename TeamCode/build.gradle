@@ -1,28 +1,25 @@
-//
-// build.gradle in TeamCode
-//
-// Most of the definitions for building your module reside in a common, shared
-// file 'build.common.gradle'. Being factored in this way makes it easier to
-// integrate updates to the FTC into your code. If you really need to customize
-// the build definitions, you can place those customizations in this file, but
-// please think carefully as to whether such customizations are really necessary
-// before doing so.
+plugins {
+    // Keep the plugins for SDK and Hot-Reloading infrastructure
+    id 'dev.frozenmilk.teamcode' version '11.1.0-1.1.1'
+    id 'dev.frozenmilk.sinister.sloth.load' version '0.2.4'
+}
 
-
-// Custom definitions may go here
-
-// Include common definitions from above.
-apply from: '../build.common.gradle'
-apply from: '../build.dependencies.gradle'
-
-android {
-    namespace = 'org.firstinspires.ftc.teamcode'
-
-    packagingOptions {
-        jniLibs.useLegacyPackaging true
-    }
+ftc {
+    // Leave this empty or use only standard blocks.
+    // We are skipping 'dairy {}' because of the current sync issue.
 }
 
 dependencies {
-    implementation project(':FtcRobotController')
+    // 1. Sloth & Sinister (Essential for <2s Hot-Reloading)
+    implementation "dev.frozenmilk.sinister:Sloth:0.2.4"
+
+    // 2. Panels (The Sloth-specific version is required to avoid crashes)
+    implementation "com.bylazar.sloth:fullpanels:0.2.4+1.0.12"
+
+    // 3. SolversLib (Core framework + Pedro Pathing Integration)
+    implementation "org.solverslib:core:0.3.4"
+    implementation "org.solverslib:pedroPathing:0.3.4"
+
+    // 4. Pedro Pathing Core
+    implementation "com.pedropathing:ftc:2.0.6"
 }
