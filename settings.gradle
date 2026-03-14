@@ -1,23 +1,2 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-        maven { url 'https://repo.dairy.foundation/releases/' }
-    }
-}
-
-dependencyResolutionManagement {
-    // Change FAIL_ON_PROJECT_REPOS to PREFER_SETTINGS to prevent 'MavenRepo' crashes
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://repo.dairy.foundation/releases/' }
-        maven { url 'https://mymaven.bylazar.com/releases' } // Required for Panels
-    }
-}
-
-rootProject.name = "FtcRobotController"
 include ':FtcRobotController'
 include ':TeamCode'
