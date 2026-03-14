@@ -1,31 +1,37 @@
+// 1. Keep the Sloth plugin for hot-reloading
 plugins {
-    // Keep the plugins for SDK and Hot-Reloading infrastructure
-    id 'dev.frozenmilk.teamcode' version '11.1.0-1.1.1'
     id 'dev.frozenmilk.sinister.sloth.load' version '0.2.4'
 }
 
-ftc {
-    // Leave this empty or use only standard blocks.
-    // We are skipping 'dairy {}' because of the current sync issue.
+// 2. RESTORE THE ORIGINAL SDK LINKS
+// These files are essential for your code to "see" OpMode, HardwareMap, etc.
+apply from: '../build.common.gradle'
+apply from: '../build.dependencies.gradle'
+
+// 3. Restore the Android configuration
+android {
+    namespace = 'org.firstinspires.ftc.teamcode'
+    packagingOptions {
+        jniLibs.useLegacyPackaging true
+    }
 }
 
+// 4. Manually declare your cutting-edge libraries
 dependencies {
-    // 1. Sloth & Sinister (Essential for <2s Hot-Reloading)
+    // CRITICAL: This line links your code to the FTC SDK module
+    implementation project(':FtcRobotController')
+
+    // Sloth & Sinister (Essential for <2s Hot-Reloading)
     implementation "dev.frozenmilk.sinister:Sloth:0.2.4"
 
-    // 2. Panels (The Sloth-specific version is required to avoid crashes)
+    // Panels (The Sloth-specific version is required to avoid crashes)
     implementation "com.bylazar.sloth:fullpanels:0.2.4+1.0.12"
 
-    // 3. SolversLib (Core framework + Pedro Pathing Integration)
+    // SolversLib & Pedro Pathing Integration
     implementation "org.solverslib:core:0.3.4"
     implementation "org.solverslib:pedroPathing:0.3.4"
 
-    // 4. Pedro Pathing Core
+    // Pedro Pathing Core & Telemetry
     implementation "com.pedropathing:ftc:2.0.6"
-    implementation 'com.pedropathing:telemetry:1.0.0'
-
-}
-
-android {
-    compileSdk 34
+    implementation "com.pedropathing:telemetry:1.0.0"
 }
