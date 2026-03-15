@@ -9,7 +9,6 @@ repositories {
 
 configure<com.android.build.gradle.AppExtension> {
     namespace = "org.firstinspires.ftc.teamcode"
-    compileSdkVersion(34)
     packagingOptions { jniLibs.useLegacyPackaging = true }
 }
 
