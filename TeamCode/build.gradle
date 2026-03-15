@@ -1,0 +1,52 @@
+// 1. THIS MUST BE AT THE VERY TOP: The plugins block to resolve Sloth
+plugins {
+    id 'dev.frozenmilk.sinister.sloth.load' version '0.2.4' apply false
+}
+
+// 1. Apply the standard Android application plugin
+apply plugin: 'com.android.application'
+
+// 2. Apply the Sloth loader plugin you requested
+apply plugin: 'dev.frozenmilk.sinister.sloth.load' //
+
+// 3. Apply the FTC common build settings
+apply from: '../build.common.gradle'
+apply from: '../build.dependencies.gradle'
+
+// 4. Override Android settings
+android {
+    namespace 'org.firstinspires.ftc.teamcode'
+
+    // THE FIX: Explicitly forcing SDK 34 here overrides the setting in build.common.gradle
+    compileSdkVersion 34
+
+    packagingOptions {
+        jniLibs.useLegacyPackaging true
+    }
+}
+
+// 5. Define Repositories
+repositories {
+    mavenCentral()
+    google()
+    maven { url "https://repo.dairy.foundation/releases/" } //
+}
+
+// 6. Define Dependencies
+dependencies {
+    implementation project(':FtcRobotController') //
+
+    // --- Dairy & Pedro Pathing Dependencies ---
+
+    // Sloth
+    implementation 'dev.frozenmilk.sinister:Sloth:0.2.4'
+    implementation "com.bylazar.sloth:fullpanels:0.2.4.1+1.0.12"
+
+    // Pedro Pathing
+    implementation 'com.pedropathing:ftc:2.0.6'
+    implementation 'com.pedropathing:telemetry:1.0.0'
+
+    // SolversLib
+    implementation "org.solverslib:core:0.3.4"
+    implementation "org.solverslib:pedroPathing:0.3.4"
+}
