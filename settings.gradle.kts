@@ -3,7 +3,7 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
         google()
-        maven("https://repo.dairy.foundation/releases/") // <- This is required for the FTC plugin
+        maven("https://repo.dairy.foundation/releases/")
     }
 }
 
