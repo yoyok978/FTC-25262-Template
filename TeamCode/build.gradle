@@ -1,0 +1,59 @@
+apply from: '../build.common.gradle'
+apply from: '../build.dependencies.gradle'
+apply plugin: 'dev.frozenmilk.sinister.Sloth'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.dairy.foundation/releases" }
+        //maven { url = 'https://www.matthewo.tech/maven/' }
+    }
+    dependencies {
+        classpath "dev.frozenmilk.sinister.sloth:0.0.2"
+        //classpath 'org.team11260:fast-load-plugin:0.1.2'
+    }
+}
+
+repositories {
+    maven { url 'https://repo.dairy.foundation/releases' }
+}
+
+android {
+    namespace 'org.firstinspires.ftc.teamcode'
+    packagingOptions {
+        jniLibs.useLegacyPackaging = true
+    }
+    compileSdk 34
+}
+
+ftc {
+    // 1. Core SDK
+    sdk.TeamCode()
+
+    // 2. Sloth
+    dairy {
+        implementation Sloth
+    }
+
+    // 3. Panels
+    ftControl {
+        implementation fullpanels
+    }
+
+    // 4. Pedro Pathing
+    pedro {
+        implementation core
+        implementation ftc
+        implementation telemetry
+    }
+
+    // 5. SolversLib
+    solvers {
+        implementation core
+        implementation pedroPathing
+    }
+}
+
+dependencies {
+    implementation project(':FtcRobotController')
+}
