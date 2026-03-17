@@ -10,7 +10,6 @@ import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import com.seattlesolvers.solverslib.controller.PIDController;
-import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.Helpers;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -65,16 +64,8 @@ public class PedroDrive extends SubsystemBase {
             turn = -goalLockPid.calculate(0, error); // Apply PID to turn vector
         }
 
-        // 2. Field Centric Translation
-        if (fieldCentric) {
-            double rotX = strafe * Math.cos(-heading) - forward * Math.sin(-heading);
-            double rotY = strafe * Math.sin(-heading) + forward * Math.cos(-heading);
-            strafe = rotX;
-            forward = rotY;
-        }
-
         // 3. Send vectors to Pedro Pathing
-        follower.setTeleOpDrive(forward, strafe, turn, false,isReversed ? Math.PI : 0);
+        follower.setTeleOpDrive(forward, strafe, turn, fieldCentric,isReversed ? Math.PI : 0);
     }
 
     public void toggleGoalLock() {

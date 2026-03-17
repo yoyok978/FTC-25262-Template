@@ -8,10 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.RunCommand;
-
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
-
 import org.firstinspires.ftc.teamcode.Stats;
 import org.firstinspires.ftc.teamcode.subsystems.RobotCommands;
 import org.firstinspires.ftc.teamcode.subsystems.conv.Conv;
@@ -22,10 +20,10 @@ import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 import java.util.function.DoubleSupplier;
 
 @Configurable
-@TeleOp(name = "Unified Blue TeleOp",group = "TeleOp")
-public class BluePrimaryTeleOp extends CommandOpMode {
+@TeleOp(name = "Unified Red TeleOp", group = "TeleOp")
+public class RedPrimaryTeleOp extends CommandOpMode {
 
-    public static boolean IS_BLUE = true;
+    public static boolean IS_BLUE = false;
     public static boolean FIELD_CENTRIC = false; // Toggle this from Dashboard to switch modes
     public static double SHOOTER_SPEED = 794.0;
 

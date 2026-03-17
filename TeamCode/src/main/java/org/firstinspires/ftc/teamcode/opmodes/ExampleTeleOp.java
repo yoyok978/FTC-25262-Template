@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
-import com.bylazar.panels.Panels;
 import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,8 +8,8 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
 
-@TeleOp(name = "Main TeleOp")
-public class MainTeleOp extends CommandOpMode {
+@TeleOp(name = "Example TeleOp",group = "Example")
+public class ExampleTeleOp extends CommandOpMode {
 
     private Intake intake;
     private GamepadEx driverOp;
