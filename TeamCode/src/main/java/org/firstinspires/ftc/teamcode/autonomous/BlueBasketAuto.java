@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.JoinedTelemetry;
 import com.bylazar.telemetry.PanelsTelemetry;
-import com.bylazar.telemetry.TelemetryManager;
+
 import com.pedropathing.follower.Follower;
 
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.PedroCoordinates;
+
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -15,7 +16,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.*;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
-import com.seattlesolvers.solverslib.pedroCommand.HoldPointCommand;
 import com.seattlesolvers.solverslib.pedroCommand.TurnToCommand;
 import org.firstinspires.ftc.teamcode.Helpers;
 import org.firstinspires.ftc.teamcode.Stats;
@@ -32,17 +32,15 @@ public class BlueBasketAuto extends CommandOpMode {
     // 1. Define Constants for Tuning (Managed by Panels)
     public static double UNLOAD_TIME_SHORT = 0.1;
     public static double UNLOAD_TIME_LONG = 0.3;
-    private TelemetryManager panelsTelemetry; // Panels Telemetry instance
+    private JoinedTelemetry joinedTelemetry; // Panels Telemetry instance
     private Follower follower;
-    private int pathState; // Current autonomous path state (state machine)
     private Paths paths; // Paths defined in the Paths class
 
 
     @Override
     public void initialize() {
         super.reset();
-
-        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+        joinedTelemetry = new JoinedTelemetry(telemetry, PanelsTelemetry.INSTANCE.getFtcTelemetry());
 
         // --- HARDWARE INITIALIZATION ---
         Conv conv = new Conv(hardwareMap, "conv");
@@ -59,8 +57,8 @@ public class BlueBasketAuto extends CommandOpMode {
 
         follower.setStartingPose(new Pose(63.000, 9.000));
 
-        panelsTelemetry.debug("Status", "Initialized");
-        panelsTelemetry.update(telemetry);
+        joinedTelemetry.addData("Status", "Initialized");
+        joinedTelemetry.update();
 
         // --- COMMAND SEQUENCING ---
         Command score1 = new SequentialCommandGroup(
@@ -114,11 +112,10 @@ public class BlueBasketAuto extends CommandOpMode {
         // Must call super.run() so the CommandScheduler executes scheduled commands
         super.run();
         Stats.robotPose = follower.getPose();
-        panelsTelemetry.debug("Path State", pathState);
-        panelsTelemetry.debug("X", follower.getPose().getX());
-        panelsTelemetry.debug("Y", follower.getPose().getY());
-        panelsTelemetry.debug("Heading", follower.getPose().getHeading());
-        panelsTelemetry.update(telemetry);
+        joinedTelemetry.addData("X", follower.getPose().getX());
+        joinedTelemetry.addData("Y", follower.getPose().getY());
+        joinedTelemetry.addData("Heading", follower.getPose().getHeading());
+        joinedTelemetry.update();
 
     }
 
