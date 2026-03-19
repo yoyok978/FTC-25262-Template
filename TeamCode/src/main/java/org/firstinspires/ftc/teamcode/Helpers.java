@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.pedroCommand.TurnToCommand;
 
 public class Helpers {
     public static final Pose GOAL_POSE_BLUE = new Pose(0, 144, 0);
@@ -19,5 +22,12 @@ public class Helpers {
         return angle;
     }
 
+    public static Command TurnToPosCommand(Follower follower, Pose targetPose){
+        Pose pose = follower.getPose();
+        return new TurnToCommand(follower, Math.atan2(
+                targetPose.getY()-pose.getY(),
+                targetPose.getX()-pose.getX()
+        ));
+    }
 
 }

@@ -48,10 +48,7 @@ public class BluePrimaryTeleOp extends CommandOpMode {
 
         RobotCommands robotCommands = new RobotCommands(conv, shooter, intake);
 
-        // Register default commands (ensures motors stop when no other command is running)
-        conv.setDefaultCommand(conv.defaultStopCommand());
-        intake.setDefaultCommand(intake.defaultStopCommand());
-        shooter.setDefaultCommand(shooter.defaultStopCommand());
+
 
         // --- 2. INITIALIZE GAMEPADS ---
         GamepadEx driver = new GamepadEx(gamepad2);
@@ -93,8 +90,7 @@ public class BluePrimaryTeleOp extends CommandOpMode {
         operator.getGamepadButton(GamepadKeys.Button.A).whileHeld(
                 new RunCommand(() -> {
                     double power = operator.getButton(GamepadKeys.Button.RIGHT_BUMPER) ? 0.12 : 0.08;
-                    intake.spinUp(1.0);
-                    conv.setPower(power);
+                    robotCommands.load(power);
                 }, intake, conv)
         );
 

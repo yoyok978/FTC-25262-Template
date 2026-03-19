@@ -46,10 +46,6 @@ public class RedPrimaryTeleOp extends CommandOpMode {
 
         RobotCommands robotCommands = new RobotCommands(conv, shooter, intake);
 
-        // Register default commands (ensures motors stop when no other command is running)
-        conv.setDefaultCommand(conv.defaultStopCommand());
-        intake.setDefaultCommand(intake.defaultStopCommand());
-        shooter.setDefaultCommand(shooter.defaultStopCommand());
 
         // --- 2. INITIALIZE GAMEPADS ---
         GamepadEx driver = new GamepadEx(gamepad2);

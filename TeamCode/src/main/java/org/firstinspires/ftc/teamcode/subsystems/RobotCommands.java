@@ -29,39 +29,45 @@ public class RobotCommands {
     public Command shoot(int vel) {
         // ParallelDeadlineGroup runs everything inside it until the "deadline" command (the WaitCommand) finishes.
         // This cleanly replaces the SleepActions while allowing the RunCommands to process their over-current checks.
-        return new ParallelDeadlineGroup(
-                new WaitCommand(3600), // Deadline: 0.1s initial wait + 3.5s shoot duration
-                shooter.spinUpCommand(vel),
-                new SequentialCommandGroup(
-                        new WaitCommand(100), // Wait 0.1s before feeding
-                        new ParallelCommandGroup(
-                                intake.spinUpCommand(),
-                                conv.loadCommand(0.08)
-                        )
-                )
-        ).andThen(stopShot()); // Explicitly stop everything once the deadline is reached
-    }
-
-    public Command unLoadShooter(double unloadDurationSeconds) {
-        // .withTimeout automatically interrupts the RunCommand after the given time (in milliseconds)
-        return shooter.unloadShooterCommand(-1)
-                .withTimeout((long) (unloadDurationSeconds * 1000))
-                .andThen(new InstantCommand(shooter::stop, shooter));
+        return new SequentialCommandGroup(
+                    conv.prepareToShootCommand(100),
+                    new ParallelDeadlineGroup(
+                    new WaitCommand(3600), // Deadline: 0.1s initial wait + 3.5s shoot duration
+                    shooter.spinUpCommand(vel),
+                    new SequentialCommandGroup(
+                            new WaitCommand(100), // Wait 0.1s before feeding
+                            new ParallelCommandGroup(
+                                    intake.spinUpCommand(),
+                                    conv.loadCommand(0.08)
+                            )
+                    )
+            )).andThen(stopShot()); // Explicitly stop everything once the deadline is reached
     }
 
     public Command stopShot() {
         // InstantCommands fire exactly once to zero out the hardware
         return new ParallelCommandGroup(
-                new InstantCommand(shooter::stop, shooter),
-                new InstantCommand(conv::stop, conv),
-                new InstantCommand(intake::stop, intake)
+                intake.defaultStopCommand(),
+                conv.defaultStopCommand(),
+                shooter.defaultStopCommand()
         );
+    }
+
+    public Command load() {
+        return load(0.08);
     }
 
     public Command load(double power) {
         return new ParallelCommandGroup(
                 intake.spinUpCommand(),
                 conv.loadCommand(power)
+        );
+    }
+
+    public Command unLoad() {
+        return new ParallelCommandGroup(
+                intake.spinDownCommand(),
+                conv.unLoadCommand()
         );
     }
 
@@ -75,8 +81,8 @@ public class RobotCommands {
 
     public Command stopLoad() {
         return new ParallelCommandGroup(
-                new InstantCommand(intake::stop, intake),
-                new InstantCommand(conv::stop, conv)
+                intake.defaultStopCommand(),
+                conv.defaultStopCommand()
         );
     }
 }

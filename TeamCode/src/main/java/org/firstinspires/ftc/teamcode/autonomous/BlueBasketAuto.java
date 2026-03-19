@@ -1,21 +1,23 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import com.seattlesolvers.solverslib.command.Command;
-import com.seattlesolvers.solverslib.command.CommandOpMode;
-import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
+import com.seattlesolvers.solverslib.command.*;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
+import com.seattlesolvers.solverslib.pedroCommand.HoldPointCommand;
+import com.seattlesolvers.solverslib.pedroCommand.TurnToCommand;
+import org.firstinspires.ftc.teamcode.Helpers;
 import org.firstinspires.ftc.teamcode.Stats;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.RobotCommands;
@@ -30,12 +32,18 @@ public class BlueBasketAuto extends CommandOpMode {
     // 1. Define Constants for Tuning (Managed by Panels)
     public static double UNLOAD_TIME_SHORT = 0.1;
     public static double UNLOAD_TIME_LONG = 0.3;
-
+    private TelemetryManager panelsTelemetry; // Panels Telemetry instance
     private Follower follower;
+    private int pathState; // Current autonomous path state (state machine)
+    private Paths paths; // Paths defined in the Paths class
+
 
     @Override
     public void initialize() {
         super.reset();
+
+        panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+
         // --- HARDWARE INITIALIZATION ---
         Conv conv = new Conv(hardwareMap, "conv");
 
@@ -46,88 +54,52 @@ public class BlueBasketAuto extends CommandOpMode {
 
         // --- PEDRO PATHING INITIALIZATION ---
         follower = Constants.createFollower(hardwareMap);
-
+        paths = new Paths(follower, robotCommands);
         // Define Poses
-        double goalHeading = Math.atan2(34 - 72, 24 - 72) + Math.PI;
-        Pose initialPose = new Pose(-56, -56, Math.toRadians(45));
-        Pose scoringPosition = new Pose(-24, -34, goalHeading);
-        Pose firstCollectionPosition = new Pose(-26, -40, Math.PI * 1.5 - 0.13);
-        Pose secondCollectionPosition = new Pose(-26, -60, Math.PI * 1.5 - 0.13);
-        Pose intermediateScoringPosition = new Pose(-26, -44, Math.PI * 1.5);
-        Pose parkingPosition = new Pose(32, -50, 0);
 
-        follower.setStartingPose(initialPose);
+        follower.setStartingPose(new Pose(63.000, 9.000));
 
-        // --- PATH BUILDING ---
-        PathChain driveToScoringPosition = follower.pathBuilder()
-                .addPath(new BezierLine(initialPose, scoringPosition))
-                .setLinearHeadingInterpolation(initialPose.getHeading(), scoringPosition.getHeading())
-                .build();
-
-        PathChain driveToFirstCollection = follower.pathBuilder()
-                .addPath(new BezierLine(scoringPosition, firstCollectionPosition))
-                .setLinearHeadingInterpolation(scoringPosition.getHeading(), firstCollectionPosition.getHeading())
-                .build();
-
-        PathChain driveToSecondCollection = follower.pathBuilder()
-                .addPath(new BezierLine(firstCollectionPosition, secondCollectionPosition))
-                .setConstantHeadingInterpolation(firstCollectionPosition.getHeading())
-                .build();
-
-        PathChain driveToScoringPositionFromCollection = follower.pathBuilder()
-                .addPath(new BezierLine(secondCollectionPosition, intermediateScoringPosition))
-                .setLinearHeadingInterpolation(secondCollectionPosition.getHeading(), intermediateScoringPosition.getHeading())
-                .addPath(new BezierLine(intermediateScoringPosition, scoringPosition))
-                .setLinearHeadingInterpolation(intermediateScoringPosition.getHeading(), scoringPosition.getHeading())
-                .build();
-
-        PathChain driveToParkingPosition = follower.pathBuilder()
-                .addPath(new BezierLine(scoringPosition, parkingPosition))
-                .setLinearHeadingInterpolation(scoringPosition.getHeading(), parkingPosition.getHeading())
-                .build();
+        panelsTelemetry.debug("Status", "Initialized");
+        panelsTelemetry.update(telemetry);
 
         // --- COMMAND SEQUENCING ---
         Command score1 = new SequentialCommandGroup(
-                new FollowPathCommand(follower, driveToScoringPosition),
-                robotCommands.shoot(),
-                robotCommands.stopShot()
+                new FollowPathCommand(follower, paths.path1),
+                robotCommands.shoot(950)
         );
 
-        Command collect1 = new ParallelCommandGroup(
-                robotCommands.stopShot(),
-                robotCommands.unLoadShooter(0.2),
-                new FollowPathCommand(follower, driveToFirstCollection),
+        Command collect1 = new ParallelDeadlineGroup(
+                new FollowPathCommand(follower, paths.path2),
                 robotCommands.load(0.08)
         );
-
-        Command moveToScore = new ParallelCommandGroup(
-                new FollowPathCommand(follower, driveToScoringPositionFromCollection),
-                robotCommands.unLoad(0.2),
-                robotCommands.unLoadShooter(1.0)
-        );
-
         Command score2 = new SequentialCommandGroup(
-                new FollowPathCommand(follower, driveToSecondCollection),
-                robotCommands.stopLoad(),
-                moveToScore,
-                new InstantCommand(conv::stop, conv),
-                new ParallelCommandGroup(
-                        robotCommands.unLoadShooter(0.2),
-                        robotCommands.unLoad(1.0)
-                ),
-                robotCommands.shoot(),
-                robotCommands.stopShot()
+                new TurnToCommand(follower, Math.toRadians(114)),
+                robotCommands.shoot(950)
         );
+
+        Command collect2 = new SequentialCommandGroup(
+                // Loading is handled inside the path
+                new FollowPathCommand(follower, paths.path3),
+                robotCommands.stopLoad()
+        );
+
+        Command score3 = new SequentialCommandGroup(
+                Helpers.TurnToPosCommand(follower, Helpers.GOAL_POSE_BLUE),
+                robotCommands.shoot(950)
+        );
+
 
         Command park = new SequentialCommandGroup(
                 new WaitCommand(7000),
-                new FollowPathCommand(follower, driveToParkingPosition)
+                new FollowPathCommand(follower, paths.path4)
         );
 
         Command fullAutoRoutine = new SequentialCommandGroup(
                 score1,
                 collect1,
                 score2,
+                collect2,
+                score3,
                 park
         );
 
@@ -142,6 +114,80 @@ public class BlueBasketAuto extends CommandOpMode {
         // Must call super.run() so the CommandScheduler executes scheduled commands
         super.run();
         Stats.robotPose = follower.getPose();
+        panelsTelemetry.debug("Path State", pathState);
+        panelsTelemetry.debug("X", follower.getPose().getX());
+        panelsTelemetry.debug("Y", follower.getPose().getY());
+        panelsTelemetry.debug("Heading", follower.getPose().getHeading());
+        panelsTelemetry.update(telemetry);
+
+    }
+
+    public static class Paths {
+        public PathChain path1;
+        public PathChain path2;
+        public PathChain path3;
+        public PathChain path4;
+
+
+        public Paths(Follower follower, RobotCommands robotCommands) {
+            path1 = follower.pathBuilder()
+                    .addPath(
+                            new BezierLine(
+                                    new Pose(63.000, 9.000),
+                                    new Pose(61.000, 16.000)
+                            )
+                    )
+                    .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(114))
+                    .build();
+
+            path2 = follower.pathBuilder()
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(61.000, 16.000),
+                                    new Pose(37.000, 46.000),
+                                    new Pose(0.000, 38.000),
+                                    new Pose(0.000, 33.000),
+                                    new Pose(0.000, 31.000),
+                                    new Pose(49.000, 29.000),
+                                    new Pose(61.000, 16.000)
+                            )
+                    )
+                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .build();
+
+
+            path3 = follower.pathBuilder()
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(61.000, 16.000),
+                                    new Pose(56.000, 62.000),
+                                    new Pose(43.000, 60.000)
+                            )
+                    )
+                    .setLinearHeadingInterpolation(Math.toRadians(114), Math.toRadians(180))
+                    .addParametricCallback(0.75, () -> CommandScheduler.getInstance().schedule(robotCommands.load()))
+                    .addPath(
+                            new BezierCurve(
+                                    new Pose(43.000, 60.000),
+                                    new Pose(1.000, 59.000),
+                                    new Pose(4.000, 56.000),
+                                    new Pose(61.000, 16.000)
+                            )
+                    )
+                    .setConstantHeadingInterpolation(Math.toRadians(180))
+                    .build();
+
+
+            path4 = follower.pathBuilder()
+                    .addPath(
+                            new BezierLine(
+                                    new Pose(61.000, 16.000),
+                                    new Pose(38.000, 34.000)
+                            )
+                    )
+                    .setLinearHeadingInterpolation(Math.toRadians(114), Math.toRadians(90))
+                    .build();
+        }
 
     }
 }
