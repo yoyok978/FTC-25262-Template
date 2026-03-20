@@ -30,8 +30,7 @@ import org.firstinspires.ftc.teamcode.subsystems.shooter.Shooter;
 public class BlueBasketAuto extends CommandOpMode {
 
     // 1. Define Constants for Tuning (Managed by Panels)
-    public static double UNLOAD_TIME_SHORT = 0.1;
-    public static double UNLOAD_TIME_LONG = 0.3;
+
     private JoinedTelemetry joinedTelemetry; // Panels Telemetry instance
     private Follower follower;
     private Paths paths; // Paths defined in the Paths class
