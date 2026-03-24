@@ -65,7 +65,7 @@ public class PedroDrive extends SubsystemBase {
         }
 
         // 3. Send vectors to Pedro Pathing
-        follower.setTeleOpDrive(forward, strafe, turn, fieldCentric,isReversed ? Math.PI : 0);
+        follower.setTeleOpDrive(forward, strafe, turn, fieldCentric, isReversed ? Math.PI : 0);
     }
 
     public void toggleGoalLock() {
