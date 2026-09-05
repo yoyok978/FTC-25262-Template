@@ -43,10 +43,10 @@ dependencies {
     implementation "com.bylazar.sloth:fullpanels:0.2.4.1+1.0.12"
 
     // Pedro Pathing
-    implementation 'com.pedropathing:ftc:2.1.1'
+    implementation 'com.pedropathing:ftc:2.1.2'
     implementation 'com.pedropathing:telemetry:1.0.0'
 
     // SolversLib
-    implementation "org.solverslib:core:0.3.4"
-    implementation "org.solverslib:pedroPathing:0.3.4"
+    implementation "org.solverslib:core:0.3.5"
+    implementation "org.solverslib:pedroPathing:0.3.5"
 }
