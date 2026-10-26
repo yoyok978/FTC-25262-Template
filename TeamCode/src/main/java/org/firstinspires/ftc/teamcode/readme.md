@@ -9,7 +9,7 @@ Start with the [project README](../../../../../../../../README.md) and [programm
 - `opmodes`: enabled Starter TeleOp and your team's routines.
 - `examples`: seven disabled lessons to copy, rename and intentionally enable.
 - `subsystems`: mechanism owners and command factories; `drivetrain/PedroDrive` owns the follower.
-- `pedroPathing`: robot configuration and the disabled tuning utility.
+- `pedroPathing`: shared Pedro 3 configurations, AutoTune registration and `procedures` for mecanum/Pinpoint/Foresight/validation.
 - `RobotCommandOpMode`: shared scheduler cancellation and lifecycle support.
 
 The Starter TeleOp requires four mecanum motors, Pinpoint and compatible pods. Configure the robot and measure offsets before running it. Lessons 01 and 07 need no peripherals.

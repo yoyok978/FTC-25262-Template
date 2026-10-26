@@ -30,6 +30,8 @@ For an intake, begin with a copied motor lesson and measured open-loop powers. F
 
 Change one physical or tuning variable at a time. Record battery condition, surface, load, signed measurements, units and results in team notes; enter accepted constants in source. Panels edits alone do not preserve the team's configuration.
 
+For Pedro 3 calibration, follow [AutoTune](08-panels-tuning.md#pedro-3-autotune): save Mecanum output as `drivetrainConfig`, Pinpoint output as `localizerConfig`, then Foresight output as `foresightConfig` in Constants. Replace each declaration rather than adding duplicate fields. Deploy and restart after saving each prerequisite. Pinpoint offsets now use inches, so divide old centimeter measurements by 2.54. Record the procedure results and configuration revision together; do not restore old season tuning numbers.
+
 ## Review and share changes
 
 Before editing, inspect the IDE's **Commit / Local Changes** view so you know which work is already present. Create a feature branch with the IDE's branch selector and use **Show Diff** before selecting files to commit. Keep unrelated changes separate and do not discard another programmer's work. Commit messages and pull requests should explain the resulting behavior, the relevant checks and remaining hardware validation.

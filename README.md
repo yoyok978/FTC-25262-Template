@@ -30,7 +30,7 @@ For a first lesson without motors, copy and enable [01 Lifecycle](TeamCode/src/m
 
 Also needed: an FTC controller/hub, battery, Driver Station and gamepad. All names must match exactly, including case. You may change the example names in code to match your configuration. There is no wheel-encoder fallback when Pinpoint is missing.
 
-Pod offsets start at **zero placeholders**, and motion/braking coefficients are **unmeasured estimates**. See [driving and localization](doc/guide/06-driving.md) and [autonomous](doc/guide/07-autonomous.md) before relying on localization or paths.
+Pod offsets start at **zero placeholders**, and motion/braking settings are **unmeasured Pedro 3 library defaults**. See [driving and localization](doc/guide/06-driving.md) and [autonomous](doc/guide/07-autonomous.md) before relying on localization or paths. Follow [Pedro 3 AutoTune](doc/guide/08-panels-tuning.md#pedro-3-autotune) on port `10158` and save its generated configurations in Constants.
 
 ## What the project provides
 
@@ -40,7 +40,7 @@ Pod offsets start at **zero placeholders**, and motion/braking coefficients are 
 | Dairy plugin `12.0.0-1.2.3` | Root Android build and compatible SDK/toolchain setup |
 | SolversLib `0.3.6` | Subsystems, command scheduler, button bindings, command composition |
 | Pedro core/revhub `3.0.2` | Mecanum hardware integration, Pinpoint localization and Foresight path following |
-| Pedro tuning `1.0.2` | Tuning framework; the template also includes a disabled measurement utility |
+| Pedro tuning `1.0.2` | AutoTune procedures for mecanum, Pinpoint, Foresight and validation |
 | PoseFactory | Degree-authored field poses and radian-based runtime poses |
 | Sloth `0.3.2` | Optional fast team-code deployment after a full app installation |
 | Sloth FullPanels `0.3.2+1.0.13` | Browser telemetry/configuration compatible with Sloth |

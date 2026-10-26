@@ -25,9 +25,7 @@ The same distinction matters elsewhere:
 |---|---|
 | Example02 motor `POWER` | Every execution cycle through a supplier |
 | Example03 servo positions | When the bound instant command initializes |
-| Constants' follower/controller configuration | When a follower is constructed |
-| Tuning `TEST_POWER` | Each active loop |
-| Tuning `TEST_DISTANCE`, `TURN_ANGLE` | When a new test path or heading target is requested |
+| Constants' follower/controller configuration | When components/controllers are constructed; restart after edits |
 
 Editing a field does not rebuild an existing controller or path. STOP and reinitialize after configuration changes that create snapshots. Keep numeric edits finite and within measured hardware limits. Record accepted values in source: changing a runtime field is not a saved source-code edit, and its lifetime across reloads should not be used as configuration storage.
 
@@ -47,28 +45,36 @@ Before returning to a full installation after Sloth uploads, create a second Gra
 
 These deployment actions modify the connected controller. Upstream screenshots showing a separate TeamCode Gradle module do not match this root application. With multiple devices, ensure the deployment task targets the intended controller; if uncertain, leave only that controller connected. Inspect tasks in the **Gradle** tool window, and see [JetBrains' Gradle run configuration guide](https://www.jetbrains.com/help/idea/run-debug-gradle.html) for the configuration controls. No separate Build action is needed before deployment.
 
-## Use the measurement utility
+<a id="pedro-3-autotune"></a>
+## Pedro 3 AutoTune
 
-[Tuning.java](../../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedroPathing/Tuning.java) is disabled. Enable it intentionally only after configuring all four motors, Pinpoint, pods and measured offsets. It is a collection of manual tests and a configuration checklist, not a complete automatic tuning procedure. Browser telemetry does not calibrate the robot for you.
+[Tuning.java](../../TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedroPathing/Tuning.java) registers four procedures; it is **not a TeleOp** and has no `@Disabled` to remove. The implementations are adapted from the [official Quickstart](https://github.com/Pedro-Pathing/Quickstart/tree/9dc89787898fab6b5cd9095df38489a14bf51a95/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/pedro/procedures). See [source provenance and license](../PEDRO_QUICKSTART_SOURCE.md).
 
-Select a mode with D-pad left/right **during INIT**. After START:
+1. Install the full app, leave Robot Controller running and connect to its Wi-Fi.
+2. Open `http://192.168.43.1:10158` for Control Hub, or `http://192.168.49.1:10158` for a phone controller. Substitute the actual controller address if different. **Port 10158 is AutoTune; port 8001 is Panels.**
+3. Select a procedure in the browser and follow its input/confirmation prompts. When it requests a tuning OpMode, select the procedure's step on Driver Station and use INIT/START/STOP as instructed. Do not select the removed manual "Tuning" TeleOp. Some measurement steps finish themselves; others explicitly ask you to stop after a physical push or rotation.
+4. Run the following sequence, saving and deploying each generated configuration before procedures that depend on it.
 
-| Mode | Input and behavior |
+| Procedure | Prerequisite and result |
 |---|---|
-| Localization / offsets | Sticks request forward, left and turn, scaled by `TEST_POWER` |
-| Forward, lateral or turn velocity / coast | Hold A for the selected motion; release A to request zero power with manual float behavior and record coast motion |
-| Line / translational / drive | Press A to follow a line of `TEST_DISTANCE` inches along field +X |
-| Triangle | Press A to follow a closed triangle from the current pose |
-| Circle / centripetal | Press A to follow four cubic curves approximating a closed circle |
-| Heading hold | Press A to request current heading plus `TURN_ANGLE` radians |
-| Predictive braking | Press A to run the same line geometry; compare measured stopping behavior while adjusting the braking configuration |
+| Mecanum Tuner | Enter the four hardware names. Motors spin individually; confirm the correct wheel and its direction. Replace `Constants.drivetrainConfig` with the generated block. |
+| Pinpoint Tuner | Enter `odo` (the procedure initially suggests `pinpoint`), select the actual pod type, and perform the requested pushes/rotation. Replace `Constants.localizerConfig` with its block. |
+| Tests: Pose / Localization / Driving / Odometry | Verify physical directions, measured distances and heading before algorithm tuning. Pose is a passive localizer check; other tests can drive the robot. |
+| Foresight Tuner | Requires the saved drivetrain and verified localizer. Follow velocity, natural-deceleration, heading, braking and translational identification steps. Replace `Constants.foresightConfig` with the complete generated block. |
+| Tests: Hold / Line / Curve / Interpolation | Requires all three saved configurations. Check endpoint, heading, repeatability and STOP before using autonomous scoring routines. |
 
-B stops the follower and drivetrain, ends coast recording and resets recorded maximum velocities on its press edge. STOP also stops the drivetrain. A line or curve continues after releasing A; release-to-coast applies only to the velocity/coast modes. Repeated A presses in path modes create a new test from the current pose. Path offsets use field axes, so a line is not necessarily forward relative to the robot's current heading.
+### Save results and verify
 
-Distances are inches, linear velocities inches/second, headings radians and angular velocities radians/second. `TEST_POWER` defaults to 0.3, `TEST_DISTANCE` to 24 inches and `TURN_ANGLE` to PI/2 radians. Inspect the full path and clear space before starting; the circle extends one test distance in field +X from its start. Keep test power and distances small initially.
+Replace the existing declaration, not just its initializer values, and do not add a second field with the same name. Generated blocks use `MecanumConfig`, `PinpointConfig`, `ForesightConfig`, `DcMotorSimple`, `GoBildaPinpointDriver`, `DistanceUnit`, `Controller`, `Matrix` and `Vector2D`; retain the needed imports. Custom Pinpoint pod output also needs `java.util.OptionalDouble`.
 
-The utility records release velocity, displacement and elapsed time. Its displayed `v^2/2d` is a rough constant-deceleration estimate from linear speed and straight-line displacement; it is not an angular deceleration estimate or a fitted braking model. Curved motion, noisy localization or short stopping distances can make it misleading. Recorded maxima accumulate until B; old coast results can remain visible after a later test. The utility uses float for manual coast measurements, while the starter uses its configured manual brake behavior.
+The shared factories `createDrivetrain`, `createLocalizer` and `createAlgorithm` feed both AutoTune and `createFollower`; there is no separate tuning robot configuration. Motor and Pinpoint setup procedures collect their own hardware inputs so they can run before algorithm calibration. Save their results first, deploy, then start a fresh dependent procedure.
 
-First verify localization by measured forward, lateral and rotational movement. Then characterize velocity and coast, enter measured values in Constants, reinitialize, and evaluate short lines, heading changes and curves. Change one parameter at a time and record battery condition, surface, load, requested motion and actual endpoint. Chapter [07](07-autonomous.md#foresight-fields-to-measure-and-understand) explains the configuration fields and units.
+Both Pinpoint offset and global-distance units are **inches**. When transferring old centimeter offsets, divide by 2.54: old `POD_Y_DIST` maps to `xPodOffset`, old `POD_X_DIST` to `yPodOffset`. Speeds are inches/second, decelerations inches/second squared and runtime headings radians. Keep the unit declarations in the generated block.
 
-Exercise: demonstrate Example07's live/snapshot difference, then explain which configuration changes require reinitializing your drivetrain. On a configured robot, record three repeatable short tests before changing any gain.
+The initial Foresight configuration uses **unmeasured Pedro 3 library defaults**. The old Pedro 2 velocity/deceleration numbers and braking approximations are removed; they are not substitute measurements. Foresight output includes separate forward/strafe piecewise controllers and independent coast/brake feedforward fits. Copy the entire block and reinitialize; neither browser results nor Panels edits save Java source automatically.
+
+Read each step's motion description and clear the full travel area before START. Upstream procedures can use substantial power, repeated movement and distances larger than the small teaching examples. Browser input is not a universal power limit. Keep Driver Station STOP available. Record battery, surface, load and actual results; robot measurements and STOP behavior remain to be verified on hardware.
+
+If no procedures appear, confirm the correct app is installed, the address/port and network are correct, and `@Tuner` factories remain public static, zero-argument methods returning exactly `Procedure`. Clear stale Sloth remote code before a full installation as described above.
+
+Exercise: demonstrate Example07's live/snapshot distinction, then explain why Mecanum and Pinpoint results must be saved before Foresight tuning. After tuning, record three repeatable short-path results and identify which configuration produced them.

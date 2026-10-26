@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-26 - Official Pedro 3 AutoTune integration
+
+- Replaced the custom manual Tuning TeleOp with Mecanum, Pinpoint, Foresight and Tests procedure factories, adapted from Quickstart commit `9dc89787898fab6b5cd9095df38489a14bf51a95`; retained source provenance and license.
+- Replaced Pedro 2-derived estimates with shared `drivetrainConfig`, `localizerConfig` and unmeasured Pedro 3 `foresightConfig` defaults. Preserved `createFollower` and PoseFactory APIs; motor directions are independent and Pinpoint offsets are explicitly inches (previous zero placeholders remain zero).
+- Updated English/Hebrew documentation for port 10158, procedure order, generated configuration persistence and unit migration. Dependencies remain unchanged.
+- Validation: `assembleDebug lintDebug --offline` passed; lint has zero errors and 14 existing native-library alignment/unused-resource warnings. IntelliJ Java inspections and 184 local documentation links/anchors passed. Added explicit STOP checks and finally cleanup to motorized imported steps.
+- Hardware calibration, procedure discovery on the controller, STOP behavior and path accuracy still require physical validation.
+
+
 ## 2026-10-20 - Remove automated testing scaffolding
 
 - Removed automated test sources and test-only dependencies, source settings, Android stub configuration and compiler overrides from the active and archived builds.

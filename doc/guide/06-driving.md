@@ -8,24 +8,24 @@
 
 The starter and Example05 need **four mecanum motors, goBILDA Pinpoint, and compatible odometry pods**. This is not a generic tank-drive or wheel-encoder template. Without Pinpoint, change the localizer implementation intentionally rather than deleting the device lookup and expecting localization to work.
 
-| Constants field | Default | Configure or verify |
+| Configuration field | Default | Configure or verify |
 |---|---|---|
-| `FRONT_LEFT_NAME`, `FRONT_RIGHT_NAME` | `frontLeft`, `frontRight` | Independent front motors |
-| `BACK_LEFT_NAME`, `BACK_RIGHT_NAME` | `backLeft`, `backRight` | Independent rear motors |
-| `PINPOINT_NAME` | `odo` | Pinpoint I2C device |
-| `LEFT_DIRECTION`, `RIGHT_DIRECTION` | REVERSE, FORWARD | Actual mounting and motor conventions |
-| `POD_TYPE` | goBILDA 4-bar pod | Your actual supported pod or intentionally configured encoder resolution |
-| `FORWARD_POD_DIRECTION`, `STRAFE_POD_DIRECTION` | FORWARD, FORWARD | Verify with measured movement |
-| `POD_Y_DIST` | 0 cm placeholder | Signed lateral offset of the forward-measuring pod |
-| `POD_X_DIST` | 0 cm placeholder | Signed forward offset of the lateral-measuring pod |
+| `drivetrainConfig.frontLeftName`, `frontRightName` | `frontLeft`, `frontRight` | Independent front motors |
+| `drivetrainConfig.backLeftName`, `backRightName` | `backLeft`, `backRight` | Independent rear motors |
+| `localizerConfig.name` | `odo` | Pinpoint I2C device |
+| `drivetrainConfig.*Direction` | Left REVERSE, right FORWARD | All four motor directions independently |
+| `localizerConfig.podType` | goBILDA 4-bar pod | Actual pod; custom resolution comes from Pinpoint Tuner |
+| `localizerConfig.xPodDirection`, `yPodDirection` | FORWARD, FORWARD | Forward/strafe measurement directions |
+| `localizerConfig.xPodOffset` | 0 inches, unmeasured | Signed lateral offset of forward-measuring pod |
+| `localizerConfig.yPodOffset` | 0 inches, unmeasured | Signed forward offset of strafe-measuring pod |
 
 Constants validates nonempty unique device names before hardware lookup. Correct names still do not establish correct physical corners or directions. Check mecanum wheel roller orientation and all four individual motors. If the hub configuration uses `leftFront` instead of `frontLeft`, either change that configured name or the matching field.
 
 ## Coordinate conventions and offsets
 
-At heading zero, +X is forward and +Y is left. Positive heading is counterclockwise. Poses use a global field frame you establish; the template does not know your starting tile. Distances passed to Pedro/localization are inches, headings stored in Pose are radians, and Pinpoint offset configuration is explicitly centimeters.
+At heading zero, +X is forward and +Y is left. Positive heading is counterclockwise. Poses use a global field frame you establish; the template does not know your starting tile. Distances passed to Pedro/localization are inches, headings stored in Pose are radians, and Pinpoint offset configuration is explicitly inches (`offsetUnits` and `globalDistanceUnit` are both `DistanceUnit.INCH`).
 
-The forward-measuring pod's sideways location maps through `POD_Y_DIST` to Pinpoint's `xPodOffset`. The strafe-measuring pod's forward location maps through `POD_X_DIST` to `yPodOffset`. Names identify the measured axis versus the perpendicular offset; verify signs against Pinpoint's hardware documentation and your installation. Convert inches to centimeters with 2.54 if measuring in inches, and write the resulting signed centimeters here.
+The forward-measuring pod's sideways location is Pinpoint's `xPodOffset`; the strafe-measuring pod's forward location is `yPodOffset`. Use the [Pinpoint Tuner](08-panels-tuning.md#pedro-3-autotune) output for directions, resolution and offsets, then verify physically. The old `POD_Y_DIST` mapped to `xPodOffset` and `POD_X_DIST` to `yPodOffset`; divide any old centimeter values by 2.54 before entering inches. Both previous placeholders were zero.
 
 Start with the robot aligned to a known forward direction. Move it forward a measured distance, left a measured distance, and rotate in place. Verify axis signs, units and approximate heading. Significant translation while rotating suggests offset/sign problems. Fix localization before adjusting path-control gains; a controller cannot compensate for incorrect position measurements.
 

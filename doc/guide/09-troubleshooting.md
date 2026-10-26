@@ -20,7 +20,8 @@ When something fails, open the **Build**, **Run** or **Sync** tool window, expan
 | TeamCode Gradle project not found | Select the root Android application in Run > Edit Configurations, or the root project for Gradle check configurations. TeamCode is a configured source directory. |
 | Dependency cannot resolve | Read which artifact/repository failed; check network access and repository configuration. Offline mode only works with cached artifacts. |
 | Duplicate Panels classes or incompatible configuration integration | Retain the declared Sloth FullPanels variant and inspect dependencies; do not add the regular variant alongside it. |
-| OpMode absent from Driver Station | Teaching examples and Tuning have `@Disabled`. Enable a renamed copy, check its annotation, click the Android app's Run ▶, and check for stale Sloth code. |
+| OpMode absent from Driver Station | Teaching examples have `@Disabled`. Enable a renamed copy, check its annotation, click the Android app's Run ▶, and check for stale Sloth code. |
+| AutoTune procedures absent | Open port `10158`, not Panels port `8001`. `Tuning` is not a selectable TeleOp; check installed code and static zero-argument `@Tuner` factories returning `Procedure`. |
 | INIT fails with a hardware lookup error | Match case-sensitive device names and device types to the selected Robot Controller configuration. Drive lessons require Pinpoint as well as four motors. |
 | A command never runs or repeatedly interrupts another | Keep `super.run()`, check bindings and subsystem requirements, and use one subsystem instance per physical mechanism. |
 | Sequence never advances | Continuous commands need a deadline, timeout or finish condition. Use finite `stopCommand()` inside a sequence. Durations here are milliseconds. |
@@ -38,4 +39,3 @@ The standalone lint version is intentional for these dependencies' Kotlin metada
 Run only the hardware checks relevant to your change. For a motor action, verify zero output at INIT, low-power direction, release, interruption and STOP. For a servo, verify measured linkage limits and remember that STOP does not restore a position. For driving, follow [chapter 06](06-driving.md#first-drive-verification); for paths, follow [chapter 07](07-autonomous.md#build-your-routine-incrementally).
 
 Record what actually ran: code revision, hardware configuration, measurements and observed results. Mark checks that need hardware as pending until someone performs them. A successful APK build is not a completed driving test.
-

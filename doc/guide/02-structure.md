@@ -23,6 +23,7 @@ repository/
       subsystems/MotorCommands.java, MotorSubsystem.java, ServoSubsystem.java
       subsystems/drivetrain/PedroDrive.java
       pedroPathing/Constants.java, Tuning.java
+      pedroPathing/procedures/
     main/res/
   doc/guide/, doc/archive/
   FtcRobotController/       upstream references, not a compiled module
@@ -58,7 +59,7 @@ flowchart TD
 
 An OpMode decides which controls and routines to use. A command describes an action and its lifetime. A subsystem is the one owner of a mechanism and exposes operations/command factories. Constants describe this particular robot. Avoid putting another direct `setPower()` for the same motor into an unrelated OpMode; that bypasses command ownership.
 
-`RobotCommandOpMode` is reusable lifecycle infrastructure. `MotorCommands` implements cleanup shared by continuous actions. `MotorSubsystem` and `ServoSubsystem` are generic examples you can copy/rename. `PedroDrive` owns the follower and updates it once through `periodic()`. `Constants` builds the drivetrain, localizer and algorithm. Team routines belong in `opmodes`; numbered lessons stay in `examples`.
+`RobotCommandOpMode` is reusable lifecycle infrastructure. `MotorCommands` implements cleanup shared by continuous actions. `MotorSubsystem` and `ServoSubsystem` are generic examples you can copy/rename. `PedroDrive` owns the follower and updates it once through `periodic()`. `Constants` holds `drivetrainConfig`, `localizerConfig` and `foresightConfig` and provides factories for their components. `Tuning` registers the four browser AutoTune procedures from `pedroPathing/procedures`; it is not an OpMode. Team routines belong in `opmodes`; numbered lessons stay in `examples`.
 
 ## Resources, SDK references and history
 

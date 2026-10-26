@@ -11,7 +11,7 @@
 - `opmodes`: תוכנית Starter TeleOp הפעילה ושגרות הקבוצה.
 - `examples`: שבעה שיעורים מושבתים להעתקה, שינוי שם והפעלה מכוונת.
 - `subsystems`: אחריות למנגנונים ומפעלי פקודות; `drivetrain/PedroDrive` אחראי לעוקב.
-- `pedroPathing`: תצורת הרובוט וכלי הכוונון המושבת.
+- `pedroPathing`: תצורות Pedro 3 משותפות, רישום AutoTune ותיקיית `procedures` להליכי mecanum,‏ Pinpoint,‏ Foresight ואימות.
 - `RobotCommandOpMode`: תמיכה משותפת בביטול מתזמן ובמחזור החיים.
 
 Starter TeleOp דורש ארבעה מנועי mecanum,‏ Pinpoint וגלגלי אודומטריה תואמים. הגדירו את הרובוט ומדדו היסטים לפני הרצה. שיעורים 01 ו־07 אינם דורשים ציוד היקפי.

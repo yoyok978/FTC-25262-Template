@@ -25,6 +25,7 @@ repository/
       subsystems/MotorCommands.java, MotorSubsystem.java, ServoSubsystem.java
       subsystems/drivetrain/PedroDrive.java
       pedroPathing/Constants.java, Tuning.java
+      pedroPathing/procedures/
     main/res/
   doc/guide/, doc/archive/
   FtcRobotController/
@@ -68,7 +69,7 @@ flowchart TD
 
 OpMode בוחר בקרות ושגרות. פקודה מתארת פעולה ואת משך חייה. תת־מערכת היא האחראית היחידה למנגנון וחושפת פעולות ומפעלי פקודות. הקבועים מתארים את הרובוט המסוים. הימנעו מקריאת `setPower()` ישירה נוספת לאותו מנוע ב־OpMode לא קשור; היא עוקפת את הבעלות של הפקודות.
 
-`RobotCommandOpMode` מספק תשתית מחזור חיים לשימוש חוזר. `MotorCommands` מממש ניקוי המשותף לפעולות רציפות. `MotorSubsystem` ו־`ServoSubsystem` הן דוגמאות כלליות להעתקה ושינוי שם. `PedroDrive` אחראי לעוקב ומעדכן אותו פעם אחת דרך `periodic()`. `Constants` בונה את מערכת ההנעה, מעריך המיקום והאלגוריתם. שגרות הקבוצה שייכות ל־`opmodes`; השיעורים הממוספרים נשארים ב־`examples`.
+`RobotCommandOpMode` מספק תשתית מחזור חיים לשימוש חוזר. `MotorCommands` מממש ניקוי המשותף לפעולות רציפות. `MotorSubsystem` ו־`ServoSubsystem` הן דוגמאות כלליות להעתקה ושינוי שם. `PedroDrive` אחראי לעוקב ומעדכן אותו פעם אחת דרך `periodic()`. `Constants` מחזיק את `drivetrainConfig`,‏ `localizerConfig` ו־`foresightConfig` ומספק מפעלים לרכיבים שלהם. `Tuning` רושם את ארבעת הליכי AutoTune בדפדפן מתוך `pedroPathing/procedures`; הוא אינו OpMode. שגרות הקבוצה שייכות ל־`opmodes`; השיעורים הממוספרים נשארים ב־`examples`.
 
 ## משאבים, מקורות SDK והיסטוריה
 

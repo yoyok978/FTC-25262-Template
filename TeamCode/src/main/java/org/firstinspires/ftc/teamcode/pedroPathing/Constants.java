@@ -17,122 +17,86 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+/** Shared Pedro 3 configurations. Replace each block with its measured AutoTune output.
+ * הגדרות Pedro 3 משותפות. החליפו כל בלוק בפלט המדוד המתאים של AutoTune.
+ */
 @Configurable
 public class Constants {
-    // Authored field headings use degrees; Pedro stores the resulting headings in radians.
-    // עברית: זוויות מגרש שנכתבות בקוד הן במעלות; Pedro שומר את הזוויות המתקבלות ברדיאנים.
+    // Field-authoring uses degrees; runtime calculations and stored Pose headings use radians.
+    // כתיבת תנוחות מגרש במעלות; חישובי זמן ריצה והזוויות השמורות ב־Pose ברדיאנים.
     public static final PoseFactory FIELD_POSES = PoseFactory.degrees();
-    // Runtime calculations and tuning angles already use radians.
-    // עברית: חישובי זמן ריצה וזוויות כוונון כבר משתמשים ברדיאנים.
     public static final PoseFactory RADIAN_POSES = PoseFactory.radians();
 
-    // REQUIRED: four independently configured motors and a goBILDA Pinpoint with odometry pods.
-    // עברית: נדרשים ארבעה מנועים המוגדרים בנפרד ו־goBILDA Pinpoint עם גלגלי אודומטריה.
-    // These names must match the active Robot Controller hardware configuration exactly.
-    // עברית: שמות אלה חייבים להתאים בדיוק לתצורת החומרה הפעילה של Robot Controller.
-    public static String FRONT_LEFT_NAME = "frontLeft";
-    public static String FRONT_RIGHT_NAME = "frontRight";
-    public static String BACK_LEFT_NAME = "backLeft";
-    public static String BACK_RIGHT_NAME = "backRight";
-    public static String PINPOINT_NAME = "odo";
-    public static DcMotorSimple.Direction LEFT_DIRECTION = DcMotorSimple.Direction.REVERSE;
-    public static DcMotorSimple.Direction RIGHT_DIRECTION = DcMotorSimple.Direction.FORWARD;
-    public static GoBildaPinpointDriver.EncoderDirection FORWARD_POD_DIRECTION =
-            GoBildaPinpointDriver.EncoderDirection.FORWARD;
-    public static GoBildaPinpointDriver.EncoderDirection STRAFE_POD_DIRECTION =
-            GoBildaPinpointDriver.EncoderDirection.FORWARD;
-    public static GoBildaPinpointDriver.GoBildaOdometryPods POD_TYPE =
-            GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD;
+    // Replace with Mecanum Tuner output. Names are preserved; verify each motor direction.
+    // החליפו בפלט Mecanum Tuner. השמות נשמרו; אמתו בנפרד את כיוון כל מנוע.
+    public static MecanumConfig drivetrainConfig = new MecanumConfig(c -> {
+        c.frontLeftName.set("frontLeft");
+        c.frontRightName.set("frontRight");
+        c.backLeftName.set("backLeft");
+        c.backRightName.set("backRight");
+        c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
+        c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
+        c.frontRightDirection.set(DcMotorSimple.Direction.FORWARD);
+        c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
+    });
 
-    // PLACEHOLDERS in centimeters. Measure signed pod offsets; see doc/guide/06-driving.md.
-    // עברית: ערכים זמניים בסנטימטרים. מדדו היסטי אודומטריה עם סימן; ראו doc/guide/he/06-driving.md.
-    public static double POD_X_DIST = 0;
-    public static double POD_Y_DIST = 0;
+    // Replace with Pinpoint Tuner output. BOTH offset and global distance units are inches.
+    // Zero offsets are unmeasured placeholders. Divide previous centimeter values by 2.54.
+    // החליפו בפלט Pinpoint Tuner. יחידות ההיסטים והמרחק הגלובלי הן אינצ׳ים.
+    // היסטי אפס הם ערכים זמניים שלא נמדדו. ערכים קודמים בסנטימטרים יש לחלק ב־2.54.
+    public static PinpointConfig localizerConfig = new PinpointConfig(c -> {
+        c.name.set("odo");
+        c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        c.xPodOffset.set(0.0);
+        c.yPodOffset.set(0.0);
+        c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        c.globalDistanceUnit.set(DistanceUnit.INCH);
+        c.offsetUnits.set(DistanceUnit.INCH);
+    });
 
-    // Starting estimates from Pedro 2 defaults, NOT measurements of this robot.
-    // עברית: אומדני התחלה מברירות המחדל של Pedro 2, ולא מדידות של רובוט זה.
-    public static double FORWARD_VELOCITY = 81.34056;
-    public static double STRAFE_VELOCITY = 65.43028;
-    public static double FORWARD_DECELERATION = 34.62719;
-    public static double STRAFE_DECELERATION = 78.15554;
-    public static double TRANSLATIONAL_P = 0.1;
-    public static double TRANSLATIONAL_STATIC = 0.015;
-    public static double HEADING_P = 1.0;
-    public static double HEADING_STATIC = 0.01;
-    // New braking coefficients require measurement. Quadratic estimates use v^2 / (2a).
-    // עברית: מקדמי בלימה חדשים דורשים מדידה. אומדנים ריבועיים משתמשים ב־v^2 / (2a).
-    public static double FORWARD_LINEAR_BRAKE = 0;
-    public static double STRAFE_LINEAR_BRAKE = 0;
-    public static double FORWARD_QUADRATIC_BRAKE = 1 / (2 * 34.62719);
-    public static double STRAFE_QUADRATIC_BRAKE = 1 / (2 * 78.15554);
-    public static double HEADING_LINEAR_BRAKE = 0;
-    public static double HEADING_QUADRATIC_BRAKE = 0;
+    // UNMEASURED Pedro 3 library defaults, not a tuned robot configuration.
+    // Replace the entire declaration with Foresight Tuner's generated foresightConfig block.
+    // Controller, Matrix and Vector2D imports support that generated block.
+    // ברירות מחדל של Pedro 3 שלא נמדדו; זו אינה תצורה מכווננת לרובוט.
+    // החליפו את ההצהרה כולה בבלוק foresightConfig שנוצר ב־Foresight Tuner.
+    public static ForesightConfig foresightConfig = new ForesightConfig(c -> { });
 
-    public static ForesightConfig createForesightConfig() {
-        return new ForesightConfig(c -> {
-            c.headingFeedback.set(Controller.pid(HEADING_P, 0, 0));
-            c.headingStaticFF.set(Controller.staticFeedforward(HEADING_STATIC));
-            c.forwardTranslational.set(Controller.sum(Controller.pid(TRANSLATIONAL_P, 0, 0),
-                    Controller.staticFeedforward(TRANSLATIONAL_STATIC)));
-            c.strafeTranslational.set(Controller.sum(Controller.pid(TRANSLATIONAL_P, 0, 0),
-                    Controller.staticFeedforward(TRANSLATIONAL_STATIC)));
-            // New feedforward interfaces have no exact equivalent to Pedro 2 drive PIDF.
-            // עברית: לממשקי הבקרה המקדימה החדשים אין מקבילה מדויקת ל־PIDF ההנעה של Pedro 2.
-            c.coast.set(Controller.proportionalFeedforward(1 / FORWARD_VELOCITY));
-            c.brake.set(Controller.proportionalFeedforward(1 / FORWARD_VELOCITY));
-            c.maxAchievableForwardVelocity.set(FORWARD_VELOCITY);
-            c.maxAchievableStrafeVelocity.set(STRAFE_VELOCITY);
-            c.naturalForwardDeceleration.set(FORWARD_DECELERATION);
-            c.naturalStrafeDeceleration.set(STRAFE_DECELERATION);
-            c.linearBrakeCoefficients.set(Matrix.diag(FORWARD_LINEAR_BRAKE, STRAFE_LINEAR_BRAKE));
-            c.quadraticBrakeCoefficients.set(Matrix.diag(FORWARD_QUADRATIC_BRAKE, STRAFE_QUADRATIC_BRAKE));
-            c.headingBrakeCoefficients.set(Vector2D.cartesian(HEADING_LINEAR_BRAKE, HEADING_QUADRATIC_BRAKE));
-            c.parametricTConstraint.set(0.01); // Former end t = 0.99.
-            // עברית: בעבר תנאי הקצה היה t = 0.99.
-            c.timeoutConstraint.set(100.0);
-        });
-    }
-
-    /** Validate before looking up hardware so duplicate drive names fail with a useful message.
-     * עברית: אימות לפני איתור חומרה מאפשר לדווח באופן מועיל על שמות הנעה כפולים.
+    /** Reject empty or duplicate configured names before hardware lookup.
+     * דחיית שמות ריקים או כפולים לפני איתור חומרה.
      */
     public static void validateHardwareNames() {
         java.util.Set<String> names = new java.util.HashSet<>();
-        for (String name : new String[] {FRONT_LEFT_NAME, FRONT_RIGHT_NAME, BACK_LEFT_NAME,
-                BACK_RIGHT_NAME, PINPOINT_NAME}) {
+        for (String name : new String[] {drivetrainConfig.frontLeftName.get(),
+                drivetrainConfig.frontRightName.get(), drivetrainConfig.backLeftName.get(),
+                drivetrainConfig.backRightName.get(), localizerConfig.name.get()}) {
             if (name == null || name.trim().isEmpty() || !names.add(name)) {
                 throw new IllegalArgumentException("Drive and Pinpoint names must be nonempty and unique: " + name);
             }
         }
     }
 
-    /** Configuration is read once per construction; reinitialize after editing it in Panels.
-     * עברית: התצורה נקראת פעם אחת בכל בנייה; אתחלו מחדש לאחר עריכתה ב־Panels.
+    /** New components per run; procedures and normal driving share the same configuration.
+     * רכיבים חדשים לכל הרצה; הכוונון והנהיגה משתמשים באותן הגדרות.
+     */
+    public static Mecanum createDrivetrain(HardwareMap hardwareMap) {
+        validateHardwareNames();
+        return new Mecanum(hardwareMap, drivetrainConfig);
+    }
+
+    public static PinpointLocalizer createLocalizer(HardwareMap hardwareMap) {
+        validateHardwareNames();
+        return new PinpointLocalizer(hardwareMap, localizerConfig);
+    }
+
+    public static Foresight createAlgorithm() {
+        return new Foresight(foresightConfig);
+    }
+
+    /** Reinitialize after configuration edits; never reuse a running follower for tuning.
+     * אתחלו מחדש אחרי עריכת תצורה; אין להשתמש בעוקב פעיל מחדש לצורך כוונון.
      */
     public static Follower createFollower(HardwareMap hardwareMap) {
-        validateHardwareNames();
-        MecanumConfig drive = new MecanumConfig(c -> {
-            c.frontLeftName.set(FRONT_LEFT_NAME);
-            c.backLeftName.set(BACK_LEFT_NAME);
-            c.frontRightName.set(FRONT_RIGHT_NAME);
-            c.backRightName.set(BACK_RIGHT_NAME);
-            c.frontLeftDirection.set(LEFT_DIRECTION);
-            c.backLeftDirection.set(LEFT_DIRECTION);
-            c.frontRightDirection.set(RIGHT_DIRECTION);
-            c.backRightDirection.set(RIGHT_DIRECTION);
-        });
-        PinpointConfig pinpoint = new PinpointConfig(c -> {
-            c.name.set(PINPOINT_NAME);
-            c.xPodOffset.set(POD_Y_DIST);
-            c.yPodOffset.set(POD_X_DIST);
-            c.offsetUnits.set(DistanceUnit.CM);
-            c.globalDistanceUnit.set(DistanceUnit.INCH); // Existing field coordinates are inches.
-            // עברית: קואורדינטות המגרש הקיימות הן באינצ׳ים.
-            c.podType.set(POD_TYPE);
-            c.xPodDirection.set(FORWARD_POD_DIRECTION);
-            c.yPodDirection.set(STRAFE_POD_DIRECTION);
-        });
-        return new Follower(new PinpointLocalizer(hardwareMap, pinpoint),
-                new Mecanum(hardwareMap, drive), new Foresight(createForesightConfig()));
+        return new Follower(createLocalizer(hardwareMap), createDrivetrain(hardwareMap), createAlgorithm());
     }
 }
