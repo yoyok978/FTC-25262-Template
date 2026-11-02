@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.examples;
 
 import static com.pedropathing.api.Paths.*;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Constants.FIELD_POSES;
+
+import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.*;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.PedroDrive;
 @Disabled
 @Autonomous(name = "06 Line and curve", group = "Examples")
 public class Example06Autonomous extends RobotCommandOpMode {
+    private static final PoseFactory FIELD_POSES = PoseFactory.degrees();
     private PedroDrive drive;
     private String stage;
     public static Path[] examplePaths() {
