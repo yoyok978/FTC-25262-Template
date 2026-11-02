@@ -14,10 +14,6 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.PedroDrive;
  * Guide: doc/guide/07-autonomous.md. Copy/change: poses, starting orientation, Constants, class/name.
  * Remove @Disabled only after localization/drive tests. START runs one line and a return curve.
  * Check endpoint/heading telemetry and STOP before increasing distance. No mechanism required.
- * עברית: 06 — נדרשים ארבעה מנועי mecanum,‏ Pinpoint, גלגלי אודומטריה ועוקב מכוונן.
- * מדריך: doc/guide/he/07-autonomous.md. להעתקה שנו תנוחות, כיוון התחלה, Constants ושמות מחלקה ותצוגה.
- * הסירו @Disabled רק אחרי בדיקות מיקום והנעה. START מריץ קו אחד ועקומת חזרה.
- * בדקו טלמטריית נקודת קצה וזווית ו־STOP לפני הגדלת המרחק. אין צורך במנגנון נוסף.
  */
 @Disabled
 @Autonomous(name = "06 Line and curve", group = "Examples")
@@ -38,7 +34,6 @@ public class Example06Autonomous extends RobotCommandOpMode {
         drive = new PedroDrive(hardwareMap, FIELD_POSES.of(0, 0, 0));
         Path[] paths = examplePaths();
         // Subsystem periodic() is the only follower.update() site; don't add a second update here.
-        // עברית: periodic() של תת־המערכת הוא המקום היחיד לעדכון העוקב; אל תוסיפו כאן עדכון שני.
         SequentialCommandGroup routine = new SequentialCommandGroup(
                 new ParallelDeadlineGroup(new FollowPathCommand(drive.follower(), paths[0]),
                         new RunCommand(() -> stage = "Following line")),
@@ -47,10 +42,8 @@ public class Example06Autonomous extends RobotCommandOpMode {
                 new FollowPathCommand(drive.follower(), paths[1]),
                 new InstantCommand(() -> { stage = "Complete"; drive.stop(); }, drive));
         // FollowPathCommand doesn't declare our wrapper subsystem. The parent owns it explicitly.
-        // עברית: FollowPathCommand אינה מצהירה על תת־מערכת המעטפת שלנו; ההורה מחזיק בה במפורש.
         routine.addRequirements(drive);
         schedule(routine); // Scheduler does not run until START in RobotCommandOpMode.
-        // עברית: ב־RobotCommandOpMode המתזמן אינו רץ עד START.
     }
     @Override public void run() {
         super.run();

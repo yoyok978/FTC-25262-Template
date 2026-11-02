@@ -6,7 +6,6 @@ import com.seattlesolvers.solverslib.command.Subsystem;
 import java.util.function.BooleanSupplier;
 
 /** Motor actions release outputs on normal completion, cancellation, and faults.
- * עברית: פעולות מנוע משחררות פלטים בסיום רגיל, בביטול ובתקלות.
  */
 public final class MotorCommands {
     private MotorCommands() { }

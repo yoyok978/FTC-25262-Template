@@ -9,12 +9,6 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.PedroDrive;
  * Copy/change: Constants hardware settings and measured offsets; class/@TeleOp; remove @Disabled.
  * Gamepad 1 sticks drive; LB reduces speed. Robot-centric only, no saved pose from another OpMode.
  * Check centered-stick zero motion, then forward, left and CCW. See StarterTeleOp for frame/reset bindings.
- * עברית: 05 — נדרשים ארבעה מנועי mecanum,‏ Pinpoint וגלגלי אודומטריה.
- * מדריך: doc/guide/he/06-driving.md. התאימו הגדרות חומרה והיסטים מדודים ב־Constants.
- * שנו מחלקה ו־@TeleOp והסירו @Disabled. הסטיקים בבקר 1 נוהגים; LB מאט.
- * הנהיגה יחסית לרובוט בלבד, ללא תנוחה שמורה מ־OpMode אחר.
- * בדקו אפס תנועה במרכז הסטיקים, ואז קדימה, שמאלה ונגד כיוון השעון.
- * לקישורי שינוי מערכת צירים ואיפוס ראו StarterTeleOp.
  */
 @Disabled
 @TeleOp(name = "05 Mecanum and Pinpoint", group = "Examples")

@@ -17,7 +17,7 @@ repositories {
 dependencies {
     implementation("com.bylazar.sloth:fullpanels:0.3.2+1.0.13")
     implementation("com.pedropathing:revhub:3.0.2")
-    implementation("com.pedropathing:tuning:1.0.2")
+    implementation("com.pedropathing:tuning:1.0.3")
     implementation("org.solverslib:core:0.3.6")
     implementation("org.solverslib:pedroPathing:0.3.6")
 }

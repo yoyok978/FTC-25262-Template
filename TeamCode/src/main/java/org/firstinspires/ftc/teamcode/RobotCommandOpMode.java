@@ -4,7 +4,6 @@ import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 
 /** SolversLib resets discard scheduler state; cancel first so commands release hardware.
- * איפוס SolversLib משליך את מצב המתזמן; יש לבטל פקודות קודם כדי שישחררו חומרה.
  */
 public abstract class RobotCommandOpMode extends CommandOpMode {
     @Override

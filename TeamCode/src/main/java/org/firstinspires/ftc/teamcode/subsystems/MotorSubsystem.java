@@ -9,8 +9,6 @@ import java.util.function.DoubleSupplier;
 
 /** Copy for an intake or conveyor. Guide: doc/guide/05-hardware.md.
  * Uses SDK open-loop power, not velocity control. Supply your actual hardware name/direction.
- * עברית: העתיקו למנגנון איסוף או למסוע. מדריך: doc/guide/he/05-hardware.md.
- * משתמש בהספק חוג פתוח של SDK ולא בבקרת מהירות. ספקו שם חומרה וכיוון אמיתיים.
  */
 public class MotorSubsystem extends SubsystemBase {
     private final DcMotorEx motor;
@@ -20,7 +18,6 @@ public class MotorSubsystem extends SubsystemBase {
     }
 
     /** Accepts an existing motor without looking it up in HardwareMap.
-     * עברית: מקבל מנוע קיים ללא איתור ב־HardwareMap.
      */
     public MotorSubsystem(DcMotorEx motor, DcMotorSimple.Direction direction) {
         this.motor = motor;
@@ -29,7 +26,6 @@ public class MotorSubsystem extends SubsystemBase {
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         stop();
         // SubsystemBase registers automatically. The default command must never finish.
-        // עברית: SubsystemBase נרשמת אוטומטית. פקודת ברירת המחדל חייבת לא להסתיים לעולם.
         setDefaultCommand(defaultStopCommand());
     }
 
@@ -40,11 +36,9 @@ public class MotorSubsystem extends SubsystemBase {
 
     public void stop() { motor.setPower(0); }
     public double velocity() { return motor.getVelocity(); } // Encoder ticks per second.
-    // עברית: המהירות בטיקים של מקודד לשנייה.
 
     public Command run(DoubleSupplier power) {
         // The supplier is evaluated each loop, so dashboard/trigger changes are live.
-        // עברית: הספק נקרא בכל לולאה, ולכן שינויי לוח בקרה או הדק נקראים בזמן אמת.
         return MotorCommands.run(() -> setPower(power.getAsDouble()), this::stop, () -> false, this);
     }
 

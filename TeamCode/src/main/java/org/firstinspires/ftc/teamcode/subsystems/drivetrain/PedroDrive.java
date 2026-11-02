@@ -14,15 +14,12 @@ import org.firstinspires.ftc.teamcode.subsystems.MotorCommands;
 
 /** Four mecanum motors + Pinpoint + compatible pods REQUIRED.
  * Guide: doc/guide/06-driving.md. Localizer updates happen only in periodic().
- * עברית: נדרשים ארבעה מנועי mecanum,‏ Pinpoint וגלגלי אודומטריה תואמים.
- * מדריך: doc/guide/he/06-driving.md. עדכוני מעריך המיקום מתבצעים רק ב־periodic().
  */
 public class PedroDrive extends SubsystemBase {
     private final Follower follower;
     public PedroDrive(HardwareMap map, Pose start) { this(Constants.createFollower(map), start); }
 
     /** Accepts an existing follower and establishes its starting pose.
-     * עברית: מקבל עוקב קיים וקובע את תנוחת ההתחלה שלו.
      */
     public PedroDrive(Follower follower, Pose start) {
         this.follower = follower;
@@ -53,7 +50,6 @@ public class PedroDrive extends SubsystemBase {
     public void stop() {
         follower.stop();
         follower.drivetrain.stop(); // Zero immediately; don't wait for another update.
-        // עברית: מאפס מיד, ללא המתנה לעדכון נוסף.
     }
     public void telemetryDebug(Telemetry telemetry) {
         telemetry.addData("Pose (in, rad)", follower.pose());

@@ -11,10 +11,6 @@ import org.firstinspires.ftc.teamcode.subsystems.MotorSubsystem;
  * Copy/change: motor name, direction, POWER, file/class/@TeleOp; remove @Disabled.
  * A held: forward, B held: reverse. Release: stop. Don't hold both competing buttons.
  * Check low-power direction first, then release/STOP. No drivetrain or Pinpoint needed.
- * עברית: 02 — מנוע אחד בשם exampleMotor. מדריך: doc/guide/he/05-hardware.md.
- * להעתקה: שנו שם מנוע, כיוון, POWER ושמות קובץ, מחלקה ו־@TeleOp; הסירו @Disabled.
- * החזקת A: קדימה; החזקת B: אחורה; שחרור: עצירה. אל תחזיקו את שני הכפתורים המתחרים.
- * בדקו תחילה כיוון בהספק נמוך, ואז שחרור ו־STOP. אין צורך בהנעה או ב־Pinpoint.
  */
 @Disabled
 @Configurable

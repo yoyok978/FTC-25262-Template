@@ -10,10 +10,6 @@ import org.firstinspires.ftc.teamcode.RobotCommandOpMode;
  * Copy/change: class/name, fields and telemetry; remove @Disabled.
  * Edit REQUESTED in Panels: 'live' updates, 'snapshot' stays until reinitialize.
  * Check the same telemetry in Driver Station. Sloth hot loading is a separate workflow.
- * עברית: 07 — Panels והגדרות ללא חומרה. מדריך: doc/guide/he/08-panels-tuning.md.
- * להעתקה: שנו מחלקה, שם תצוגה, שדות וטלמטריה; הסירו @Disabled.
- * ערכו REQUESTED ב־Panels: הערך החי מתעדכן, ותמונת המצב נשארת עד אתחול מחדש.
- * בדקו אותה טלמטריה ב־Driver Station. טעינה חמה באמצעות Sloth היא תהליך נפרד.
  */
 @Disabled
 @Configurable

@@ -10,10 +10,6 @@ import org.firstinspires.ftc.teamcode.subsystems.ServoSubsystem;
  * Copy/change: hardware name, two measured positions, file/class/@TeleOp; remove @Disabled.
  * A requests POSITION_A; B requests POSITION_B. Constructor does not move the servo.
  * Check travel without a binding linkage. STOP does not return a servo to a safe position.
- * עברית: 03 — סרוו מיקום בשם exampleServo. מדריך: doc/guide/he/05-hardware.md.
- * להעתקה: שנו שם חומרה, שני מיקומים מדודים ושמות קובץ, מחלקה ו־@TeleOp; הסירו @Disabled.
- * A מבקש POSITION_A;‏ B מבקש POSITION_B. הבנאי אינו מזיז את הסרוו.
- * בדקו תנועה ללא חיבור מכני שנתקע. STOP אינו מחזיר סרוו למיקום בטוח.
  */
 @Disabled
 @Configurable
