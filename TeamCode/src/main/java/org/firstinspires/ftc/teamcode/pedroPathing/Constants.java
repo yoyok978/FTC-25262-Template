@@ -1,92 +1,11 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
-import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.api.PoseFactory;
-import com.pedropathing.algorithm.Foresight;
-import com.pedropathing.algorithm.ForesightConfig;
-import com.pedropathing.controllers.Controller;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.math.Matrix;
-import com.pedropathing.math.Vector2D;
-import com.pedropathing.revhub.drivetrains.Mecanum;
-import com.pedropathing.revhub.drivetrains.MecanumConfig;
-import com.pedropathing.revhub.localizers.PinpointConfig;
-import com.pedropathing.revhub.localizers.PinpointLocalizer;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-/** Shared Pedro 3 configurations. Replace each block with its measured AutoTune output.
- */
-@Configurable
 public class Constants {
-    // Field-authoring uses degrees; runtime calculations and stored Pose headings use radians.
-    public static final PoseFactory FIELD_POSES = PoseFactory.degrees();
-    public static final PoseFactory RADIAN_POSES = PoseFactory.radians();
-
-    // Replace with Mecanum Tuner output. Names are preserved; verify each motor direction.
-    public static MecanumConfig drivetrainConfig = new MecanumConfig(c -> {
-        c.frontLeftName.set("frontLeft");
-        c.frontRightName.set("frontRight");
-        c.backLeftName.set("backLeft");
-        c.backRightName.set("backRight");
-        c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
-        c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
-        c.frontRightDirection.set(DcMotorSimple.Direction.FORWARD);
-        c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
-    });
-
-    // Replace with Pinpoint Tuner output. BOTH offset and global distance units are inches.
-    // Zero offsets are unmeasured placeholders. Divide previous centimeter values by 2.54.
-    public static PinpointConfig localizerConfig = new PinpointConfig(c -> {
-        c.name.set("odo");
-        c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        c.xPodOffset.set(0.0);
-        c.yPodOffset.set(0.0);
-        c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        c.globalDistanceUnit.set(DistanceUnit.INCH);
-        c.offsetUnits.set(DistanceUnit.INCH);
-    });
-
-    // UNMEASURED Pedro 3 library defaults, not a tuned robot configuration.
-    // Replace the entire declaration with Foresight Tuner's generated foresightConfig block.
-    // Controller, Matrix and Vector2D imports support that generated block.
-    public static ForesightConfig foresightConfig = new ForesightConfig(c -> { });
-
-    /** Reject empty or duplicate configured names before hardware lookup.
-     */
-    public static void validateHardwareNames() {
-        java.util.Set<String> names = new java.util.HashSet<>();
-        for (String name : new String[] {drivetrainConfig.frontLeftName.get(),
-                drivetrainConfig.frontRightName.get(), drivetrainConfig.backLeftName.get(),
-                drivetrainConfig.backRightName.get(), localizerConfig.name.get()}) {
-            if (name == null || name.trim().isEmpty() || !names.add(name)) {
-                throw new IllegalArgumentException("Drive and Pinpoint names must be nonempty and unique: " + name);
-            }
-        }
-    }
-
-    /** New components per run; procedures and normal driving share the same configuration.
-     */
-    public static Mecanum createDrivetrain(HardwareMap hardwareMap) {
-        validateHardwareNames();
-        return new Mecanum(hardwareMap, drivetrainConfig);
-    }
-
-    public static PinpointLocalizer createLocalizer(HardwareMap hardwareMap) {
-        validateHardwareNames();
-        return new PinpointLocalizer(hardwareMap, localizerConfig);
-    }
-
-    public static Foresight createAlgorithm() {
-        return new Foresight(foresightConfig);
-    }
-
-    /** Reinitialize after configuration edits; never reuse a running follower for tuning.
-     */
-    public static Follower createFollower(HardwareMap hardwareMap) {
-        return new Follower(createLocalizer(hardwareMap), createDrivetrain(hardwareMap), createAlgorithm());
+    public static Follower create(HardwareMap h) {
+        // return new Follower(Drivetrain, Localizer, Foresight);
+        return null;
     }
 }

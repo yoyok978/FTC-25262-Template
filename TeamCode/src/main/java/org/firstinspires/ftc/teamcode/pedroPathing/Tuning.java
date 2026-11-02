@@ -12,7 +12,5 @@ import org.firstinspires.ftc.teamcode.pedroPathing.procedures.Tests;
  * Save generated configurations in Constants.java; see doc/guide/08-panels-tuning.md.
  */
 public final class Tuning {
-    private Tuning() { }
-
 
 }
