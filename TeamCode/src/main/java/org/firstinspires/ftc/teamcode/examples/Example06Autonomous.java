@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.PedroDrive;
 @Disabled
 @Autonomous(name = "06 Line and curve", group = "Examples")
 public class Example06Autonomous extends RobotCommandOpMode {
-    private static final PoseFactory FIELD_POSES = PoseFactory.degrees();
+    public static final PoseFactory FIELD_POSES = PoseFactory.degrees();
     private PedroDrive drive;
     private String stage;
     public static Path[] examplePaths() {
