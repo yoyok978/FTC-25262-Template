@@ -12,10 +12,11 @@ repositories {
     google()
     mavenCentral()
     maven("https://repo.dairy.foundation/releases")
+    maven("https://mymaven.bylazar.com/releases")
 }
 
 dependencies {
-    implementation("com.bylazar.sloth:fullpanels:0.3.2+1.0.13")
+    implementation("com.bylazar:fullpanels:1.0.19")
     implementation("com.pedropathing:revhub:3.0.2")
     implementation("com.pedropathing:tuning:1.0.3")
     implementation("org.solverslib:core:0.3.6")

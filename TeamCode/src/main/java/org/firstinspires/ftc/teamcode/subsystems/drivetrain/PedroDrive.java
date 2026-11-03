@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.MotorCommands;
  */
 public class PedroDrive extends SubsystemBase {
     private final Follower follower;
-    public PedroDrive(HardwareMap map, Pose start) { this(Constants.createFollower(map), start); }
+    public PedroDrive(HardwareMap map, Pose start) { this(Constants.create(map), start); }
 
     /** Accepts an existing follower and establishes its starting pose.
      */

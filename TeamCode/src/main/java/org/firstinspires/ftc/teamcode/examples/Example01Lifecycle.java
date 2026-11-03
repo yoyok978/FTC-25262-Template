@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.RobotCommandOpMode;
  * Copy: rename file/class/@TeleOp, remove @Disabled. No hardware configuration required.
  * Gamepad 1 A is shown in telemetry. Check: INIT status, START loop count, STOP cleanup.
  */
-@Disabled
 @TeleOp(name = "01 Lifecycle (no hardware)", group = "Examples")
 public class Example01Lifecycle extends RobotCommandOpMode {
     private int loops;

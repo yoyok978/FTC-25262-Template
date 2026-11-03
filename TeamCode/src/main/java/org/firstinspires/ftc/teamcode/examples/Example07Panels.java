@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.RobotCommandOpMode;
  * Edit REQUESTED in Panels: 'live' updates, 'snapshot' stays until reinitialize.
  * Check the same telemetry in Driver Station. Sloth hot loading is a separate workflow.
  */
-@Disabled
 @Configurable
 @TeleOp(name = "07 Panels (no hardware)", group = "Examples")
 public class Example07Panels extends RobotCommandOpMode {
