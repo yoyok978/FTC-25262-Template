@@ -34,7 +34,7 @@ public class StarterTeleOp extends RobotCommandOpMode {
         drive.setDefaultCommand(drive.drive(
                 () -> deadband(-gamepad1.left_stick_y), () -> deadband(-gamepad1.left_stick_x),
                 () -> deadband(-gamepad1.right_stick_x), () -> fieldCentric,
-                () -> gamepad1.left_bumper ? 0.2 : 0.4));
+                () -> gamepad1.left_bumper ? 0.2 : 1));
     }
     private static double deadband(double value) { return Math.abs(value) < 0.05 ? 0 : value; }
     @Override public void initialize_loop() {
